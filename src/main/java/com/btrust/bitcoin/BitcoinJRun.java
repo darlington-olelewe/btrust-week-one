@@ -23,8 +23,9 @@ public class BitcoinJRun {
         try {
             // Use the test network. For mainnet, use NetworkParameters.fromID(NetworkParameters.ID_MAINNET).
             NetworkParameters networkParameters = TestNet3Params.get();
-            List<String> mnemonicCode = MnemonicCode.INSTANCE.toMnemonic(SecureRandom.getSeed(16 * 8));
-
+            List<String> mnemonicCode = MnemonicCode.INSTANCE.toMnemonic(SecureRandom.getSeed(16 ));
+            System.out.println("this is the mnemonic codes");
+            System.out.println(mnemonicCode);
             // Create a deterministic seed from the mnemonic
             DeterministicSeed seed = new DeterministicSeed(mnemonicCode, null, "", System.currentTimeMillis());
 
@@ -43,9 +44,10 @@ public class BitcoinJRun {
 
             System.out.println("| Public Address | " + address + " |");
             System.out.println("| Private Key    | " + privateKeyWIF + " |");
+            System.out.println("| Mnemonic Code  | " + mnemonicCode.size() + " |");
 
             // Save wallet information to a JSON file
-            saveWalletToJson(address.toString(), privateKeyWIF);
+            saveWalletToJson(address.toString(), privateKeyWIF, mnemonicCode);
 
             System.out.println("Wallet created and saved to wallet.json");
         } catch (IOException e) {
@@ -55,8 +57,8 @@ public class BitcoinJRun {
         }
     }
 
-    public static void saveWalletToJson(String address, String privateKey) throws IOException {
-        WalletData walletData = new WalletData(address, privateKey);
+    public static void saveWalletToJson(String address, String privateKey, List<String> mnemonics) throws IOException {
+        WalletData walletData = new WalletData(address, privateKey,mnemonics);
         File file = new File("wallet.json");
 
         try (FileWriter writer = new FileWriter(file)) {
@@ -68,13 +70,16 @@ public class BitcoinJRun {
         private final String address;
         private final String privateKey;
 
-        public WalletData(String address, String privateKey) {
+        private final List<String> mnemonics;
+
+        public WalletData(String address, String privateKey, List<String> mnemonics) {
             this.address = address;
             this.privateKey = privateKey;
+            this.mnemonics = mnemonics;
         }
 
         public String toJson() {
-            return String.format("{\n  \"address\": \"%s\",\n  \"privateKey\": \"%s\"\n}", address, privateKey);
+            return String.format("{\n  \"address\": \"%s\",\n  \"privateKey\": \"%s\",\n \"mnemonicCodes\": \"%s\"\n}", address, privateKey,mnemonics);
         }
     }
 }

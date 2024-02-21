@@ -11,7 +11,7 @@ This is a Btrust week 1 assesment.
 
 ## Introduction
 
-Creating a bitcoin wallet using bitcoinJ api(s)
+Creating a bitcoin wallet using bitcoinJ library api(s)
 
 
 
@@ -25,3 +25,4 @@ git clone https://github.com/darlington-olelewe/btrust-week-one.git
 cd btrust-week-one
 mvn clean install
 mvn run 
+```
